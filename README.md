@@ -12,19 +12,547 @@ iii. Protection Management: chmod, chown, chgrp
 i. same program, same code.
 ii. same program, different code.
 iii. before terminating, the parent waits for the child to finish its task.
-4. Write a program to report behaviour of Linux kernel including kernel version, CPU type and CPU 
-information.
-5. Write a program to report behaviour of Linux kernel including information on configured memory, amount of 
-free and used memory. (Memory information)
-6. Write a program to copy files using system calls.
-7. Write a program to implement FCFS scheduling algorithm.
-8. Write a program to implement SJF scheduling algorithm.
-9. Write a program to implement non-preemptive priority-based scheduling algorithm.
-10. Write a program to implement SRTF scheduling algorithm.
-11. Write a program to calculate sum of n numbers using Pthreads. A list of n numbers is divided into two smaller 
-list of equal size, two separate threads are used to sum the sub lists.
-12. Write a program to implement first-fit, best-fit and worst-fit allocation strategies.
 
+
+✅ PROGRAM – 4
+
+Write a program to report behaviour of Linux kernel (kernel version, CPU info, memory info)
+
+
+```
+
+PYTHON CODE
+
+import platform
+import os
+
+print("Kernel Version:", platform.release())
+print("Operating System:", platform.system(), platform.version())
+
+print("\nCPU Info:")
+os.system("lscpu")
+
+print("\nMemory Info:")
+os.system("free -m")
+
+
+```
+
+✅ PROGRAM – 5
+
+Report configured memory, free & used memory
+
+
+```
+
+PYTHON CODE
+
+import os
+
+print("Memory Information:")
+os.system("free -h")
+
+
+```
+
+
+✅ PROGRAM – 6
+
+Write a program to copy file using system calls
+
+
+```
+
+PYTHON CODE
+
+src = "file1.txt"
+dst = "file2.txt"
+
+with open(src, "rb") as f1:
+    data = f1.read()
+
+with open(dst, "wb") as f2:
+    f2.write(data)
+
+print("File copied successfully!")
+
+
+```
+
+
+
+  
+
+✅ PROGRAM – 7
+
+Implement FCFS Scheduling
+
+
+```
+
+PYTHON CODE
+
+n = int(input("Enter number of processes: "))
+bt = []
+for i in range(n):
+    bt.append(int(input(f"Enter burst time for P{i+1}: ")))
+
+wt = [0]*n
+tat = [0]*n
+
+for i in range(1, n):
+    wt[i] = wt[i-1] + bt[i-1]
+
+for i in range(n):
+    tat[i] = wt[i] + bt[i]
+
+print("\nProcess  BT  WT  TAT")
+for i in range(n):
+    print(f"P{i+1}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+
+
+```
+
+C++ CODE
+
+
+✅ PROGRAM – 8
+
+Implement SJF Scheduling
+
+
+---
+
+PYTHON CODE
+
+n = int(input("Enter number of processes: "))
+bt = []
+
+for i in range(n):
+    bt.append(int(input(f"Enter burst time of P{i+1}: ")))
+
+process = list(range(1, n+1))
+
+# sort by burst time
+for i in range(n):
+    for j in range(n-i-1):
+        if bt[j] > bt[j+1]:
+            bt[j], bt[j+1] = bt[j+1], bt[j]
+            process[j], process[j+1] = process[j+1], process[j]
+
+wt = [0]*n
+tat = [0]*n
+
+for i in range(1, n):
+    wt[i] = wt[i-1] + bt[i-1]
+
+for i in range(n):
+    tat[i] = bt[i] + wt[i]
+
+print("\nProc  BT  WT  TAT")
+for i in range(n):
+    print(f"P{process[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
+
+
+---
+
+C++ CODE
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cout<<"Enter number of processes: ";
+    cin>>n;
+
+    int bt[n], p[n], wt[n]={0}, tat[n];
+
+    for(int i=0;i<n;i++){
+        p[i]=i+1;
+        cout<<"Burst time of P"<<i+1<<": ";
+        cin>>bt[i];
+    }
+
+    for(int i=0;i<n-1;i++)
+        for(int j=0;j<n-i-1;j++)
+            if(bt[j] > bt[j+1]) {
+                swap(bt[j], bt[j+1]);
+                swap(p[j], p[j+1]);
+            }
+
+    for(int i=1;i<n;i++)
+        wt[i] = wt[i-1] + bt[i-1];
+
+    for(int i=0;i<n;i++)
+        tat[i] = bt[i] + wt[i];
+
+    cout<<"\nProc  BT  WT  TAT\n";
+    for(int i=0;i<n;i++)
+        cout<<"P"<<p[i]<<"\t"<<bt[i]<<"\t"<<wt[i]<<"\t"<<tat[i]<<endl;
+}
+
+
+---
+
+✅ PROGRAM – 9
+
+Implement Priority Scheduling
+
+
+---
+
+PYTHON CODE
+
+n = int(input("Enter number of processes: "))
+bt = []
+priority = []
+
+for i in range(n):
+    bt.append(int(input(f"Burst time of P{i+1}: ")))
+    priority.append(int(input(f"Priority of P{i+1}: ")))
+
+process = list(range(1, n+1))
+
+for i in range(n):
+    for j in range(n-i-1):
+        if priority[j] > priority[j+1]:
+            priority[j], priority[j+1] = priority[j+1], priority[j]
+            bt[j], bt[j+1] = bt[j+1], bt[j]
+            process[j], process[j+1] = process[j+1], process[j]
+
+wt = [0]*n
+tat = [0]*n
+
+for i in range(1, n):
+    wt[i] = wt[i-1] + bt[i-1]
+
+for i in range(n):
+    tat[i] = wt[i] + bt[i]
+
+print("\nP   BT  Priority  WT  TAT")
+for i in range(n):
+    print(f"P{process[i]}\t{bt[i]}\t{priority[i]}\t{wt[i]}\t{tat[i]}")
+
+
+---
+
+C++ CODE
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    int n;
+    cout<<"Enter number of processes: ";
+    cin>>n;
+
+    int p[n], bt[n], pr[n], wt[n]={0}, tat[n];
+
+    for(int i=0;i<n;i++){
+        p[i] = i+1;
+        cout<<"Burst time of P"<<i+1<<": ";
+        cin>>bt[i];
+        cout<<"Priority of P"<<i+1<<": ";
+        cin>>pr[i];
+    }
+
+    for(int i=0;i<n-1;i++)
+        for(int j=0;j<n-i-1;j++)
+            if(pr[j] > pr[j+1]){
+                swap(pr[j], pr[j+1]);
+                swap(bt[j], bt[j+1]);
+                swap(p[j], p[j+1]);
+            }
+
+    for(int i=1;i<n;i++)
+        wt[i] = wt[i-1] + bt[i-1];
+
+    for(int i=0;i<n;i++)
+        tat[i] = bt[i] + wt[i];
+
+    cout<<"\nP   BT  Pri  WT  TAT\n";
+    for(int i=0;i<n;i++)
+        cout<<"P"<<p[i]<<"\t"<<bt[i]<<"\t"<<pr[i]<<"\t"<<wt[i]<<"\t"<<tat[i]<<endl;
+}
+
+
+---
+
+✅ PROGRAM – 10
+
+Implement Round Robin Scheduling (Time Quantum = 2)
+
+
+---
+
+PYTHON CODE
+
+bt = list(map(int, input("Enter burst times: ").split()))
+n = len(bt)
+qt = 2
+rt = bt.copy()
+t = 0
+
+wt = [0]*n
+tat = [0]*n
+
+while True:
+    done = True
+    for i in range(n):
+        if rt[i] > 0:
+            done = False
+            if rt[i] > qt:
+                t += qt
+                rt[i] -= qt
+            else:
+                t += rt[i]
+                wt[i] = t - bt[i]
+                rt[i] = 0
+
+    if done:
+        break
+
+for i in range(n):
+    tat[i] = wt[i] + bt[i]
+
+print("BT  WT  TAT")
+for i in range(n):
+    print(bt[i], wt[i], tat[i])
+
+
+---
+
+C++ CODE
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    int n, qt;
+    cout<<"Enter number of processes: ";
+    cin>>n;
+
+    int bt[n], rt[n], wt[n]={0}, tat[n];
+    cout<<"Enter burst times:\n";
+    for(int i=0;i<n;i++){
+        cin>>bt[i];
+        rt[i] = bt[i];
+    }
+
+    qt = 2;
+    int t = 0;
+
+    while(true){
+        bool done = true;
+
+        for(int i=0;i<n;i++){
+            if(rt[i] > 0){
+                done = false;
+
+                if(rt[i] > qt){
+                    t += qt;
+                    rt[i] -= qt;
+                } else {
+                    t += rt[i];
+                    wt[i] = t - bt[i];
+                    rt[i] = 0;
+                }
+            }
+        }
+
+        if(done) break;
+    }
+
+    for(int i=0;i<n;i++)
+        tat[i] = wt[i] + bt[i];
+
+    cout<<"BT  WT  TAT\n";
+    for(int i=0;i<n;i++)
+        cout<<bt[i]<<" "<<wt[i]<<" "<<tat[i]<<endl;
+}
+
+
+---
+
+✅ PROGRAM – 11
+
+Calculate sum of ‘n’ numbers using 2 child processes
+
+
+---
+
+PYTHON CODE
+
+import os
+
+numbers = [1, 2, 3, 4, 5, 6]
+
+pid = os.fork()
+
+if pid == 0:
+    print("Child 1 sum:", sum(numbers[:3]))
+else:
+    pid2 = os.fork()
+    if pid2 == 0:
+        print("Child 2 sum:", sum(numbers[3:]))
+    else:
+        os.wait()
+        os.wait()
+
+
+---
+
+C++ CODE
+
+#include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+using namespace std;
+
+int main(){
+    int arr[] = {1,2,3,4,5,6};
+    int pid = fork();
+
+    if(pid == 0){
+        cout<<"Child 1 sum: "<<arr[0]+arr[1]+arr[2]<<endl;
+    } else {
+        int pid2 = fork();
+        if(pid2 == 0){
+            cout<<"Child 2 sum: "<<arr[3]+arr[4]+arr[5]<<endl;
+        } else {
+            wait(NULL);
+            wait(NULL);
+        }
+    }
+}
+
+
+---
+
+✅ PROGRAM – 12
+
+Implement First Fit, Best Fit, Worst Fit Memory Allocation
+
+
+---
+
+PYTHON CODE
+
+blocks = [100, 500, 200, 300, 600]
+process = [212, 417, 112, 426]
+
+def first_fit():
+    b = blocks.copy()
+    print("\nFIRST FIT")
+    for p in process:
+        for i in range(len(b)):
+            if b[i] >= p:
+                print(f"Process {p} allocated to block {b[i]}")
+                b[i] -= p
+                break
+
+def best_fit():
+    b = blocks.copy()
+    print("\nBEST FIT")
+    for p in process:
+        best = -1
+        for i in range(len(b)):
+            if b[i] >= p:
+                if best == -1 or b[i] < b[best]:
+                    best = i
+        if best != -1:
+            print(f"Process {p} allocated to block {b[best]}")
+            b[best] -= p
+
+def worst_fit():
+    b = blocks.copy()
+    print("\nWORST FIT")
+    for p in process:
+        worst = -1
+        for i in range(len(b)):
+            if b[i] >= p:
+                if worst == -1 or b[i] > b[worst]:
+                    worst = i
+        if worst != -1:
+            print(f"Process {p} allocated to block {b[worst]}")
+            b[worst] -= p
+
+first_fit()
+best_fit()
+worst_fit()
+
+
+---
+
+C++ CODE
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    int blocks[] = {100, 500, 200, 300, 600};
+    int process[] = {212, 417, 112, 426};
+
+    int nBlocks = 5, nProcess = 4;
+
+    // First Fit
+    cout<<"\nFIRST FIT\n";
+    int ff[5];
+    for(int i=0;i<nBlocks;i++) ff[i] = blocks[i];
+
+    for(int i=0;i<nProcess;i++){
+        for(int j=0;j<nBlocks;j++){
+            if(ff[j] >= process[i]){
+                cout<<"Process "<<process[i]<<" allocated to block "<<ff[j]<<endl;
+                ff[j] -= process[i];
+                break;
+            }
+        }
+    }
+
+    // Best Fit
+    cout<<"\nBEST FIT\n";
+    int bf[5];
+    for(int i=0;i<nBlocks;i++) bf[i] = blocks[i];
+
+    for(int i=0;i<nProcess;i++){
+        int best=-1;
+        for(int j=0;j<nBlocks;j++){
+            if(bf[j] >= process[i]){
+                if(best==-1 || bf[j] < bf[best])
+                    best = j;
+            }
+        }
+        if(best != -1){
+            cout<<"Process "<<process[i]<<" allocated to block "<<bf[best]<<endl;
+            bf[best] -= process[i];
+        }
+    }
+
+    // Worst Fit
+    cout<<"\nWORST FIT\n";
+    int wf[5];
+    for(int i=0;i<nBlocks;i++) wf[i] = blocks[i];
+
+    for(int i=0;i<nProcess;i++){
+        int worst=-1;
+        for(int j=0;j<nBlocks;j++){
+            if(wf[j] >= process[i]){
+                if(worst==-1 || wf[j] > wf[worst])
+                    worst = j;
+            }
+        }
+        if(worst != -1){
+            cout<<"Process "<<process[i]<<" allocated to block "<<wf[worst]<<endl;
+            wf[worst] -= process[i];
+        }
+    }
+}
+
+
+---
 
 
 ```
