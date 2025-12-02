@@ -8,10 +8,16 @@ iii. Directory Management: cd, mkdir, rmdir, ls
 i. Process Control: fork, getpid, ps, kill, sleep
 ii. Communication: Input-output redirection, Pipe
 iii. Protection Management: chmod, chown, chgrp
+
+
+
+
 3. Write a program (using fork () and/or exec () commands) where parent and child execute:
 i. same program, same code.
 ii. same program, different code.
 iii. before terminating, the parent waits for the child to finish its task.
+
+
 
 
 ✅ PROGRAM – 4
@@ -113,7 +119,7 @@ for i in range(n):
 
 ```
 
-C++ CODE
+
 
 
 ✅ PROGRAM – 8
@@ -121,7 +127,7 @@ C++ CODE
 Implement SJF Scheduling
 
 
----
+```
 
 PYTHON CODE
 
@@ -154,54 +160,19 @@ for i in range(n):
     print(f"P{process[i]}\t{bt[i]}\t{wt[i]}\t{tat[i]}")
 
 
----
-
-C++ CODE
-
-#include <iostream>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    int n;
-    cout<<"Enter number of processes: ";
-    cin>>n;
-
-    int bt[n], p[n], wt[n]={0}, tat[n];
-
-    for(int i=0;i<n;i++){
-        p[i]=i+1;
-        cout<<"Burst time of P"<<i+1<<": ";
-        cin>>bt[i];
-    }
-
-    for(int i=0;i<n-1;i++)
-        for(int j=0;j<n-i-1;j++)
-            if(bt[j] > bt[j+1]) {
-                swap(bt[j], bt[j+1]);
-                swap(p[j], p[j+1]);
-            }
-
-    for(int i=1;i<n;i++)
-        wt[i] = wt[i-1] + bt[i-1];
-
-    for(int i=0;i<n;i++)
-        tat[i] = bt[i] + wt[i];
-
-    cout<<"\nProc  BT  WT  TAT\n";
-    for(int i=0;i<n;i++)
-        cout<<"P"<<p[i]<<"\t"<<bt[i]<<"\t"<<wt[i]<<"\t"<<tat[i]<<endl;
-}
+```
 
 
----
+
+
+
 
 ✅ PROGRAM – 9
 
 Implement Priority Scheduling
 
 
----
+```
 
 PYTHON CODE
 
@@ -236,56 +207,15 @@ for i in range(n):
     print(f"P{process[i]}\t{bt[i]}\t{priority[i]}\t{wt[i]}\t{tat[i]}")
 
 
----
+```
 
-C++ CODE
-
-#include <iostream>
-using namespace std;
-
-int main(){
-    int n;
-    cout<<"Enter number of processes: ";
-    cin>>n;
-
-    int p[n], bt[n], pr[n], wt[n]={0}, tat[n];
-
-    for(int i=0;i<n;i++){
-        p[i] = i+1;
-        cout<<"Burst time of P"<<i+1<<": ";
-        cin>>bt[i];
-        cout<<"Priority of P"<<i+1<<": ";
-        cin>>pr[i];
-    }
-
-    for(int i=0;i<n-1;i++)
-        for(int j=0;j<n-i-1;j++)
-            if(pr[j] > pr[j+1]){
-                swap(pr[j], pr[j+1]);
-                swap(bt[j], bt[j+1]);
-                swap(p[j], p[j+1]);
-            }
-
-    for(int i=1;i<n;i++)
-        wt[i] = wt[i-1] + bt[i-1];
-
-    for(int i=0;i<n;i++)
-        tat[i] = bt[i] + wt[i];
-
-    cout<<"\nP   BT  Pri  WT  TAT\n";
-    for(int i=0;i<n;i++)
-        cout<<"P"<<p[i]<<"\t"<<bt[i]<<"\t"<<pr[i]<<"\t"<<wt[i]<<"\t"<<tat[i]<<endl;
-}
-
-
----
 
 ✅ PROGRAM – 10
 
 Implement Round Robin Scheduling (Time Quantum = 2)
 
 
----
+```
 
 PYTHON CODE
 
@@ -322,66 +252,16 @@ for i in range(n):
     print(bt[i], wt[i], tat[i])
 
 
----
-
-C++ CODE
-
-#include <iostream>
-using namespace std;
-
-int main(){
-    int n, qt;
-    cout<<"Enter number of processes: ";
-    cin>>n;
-
-    int bt[n], rt[n], wt[n]={0}, tat[n];
-    cout<<"Enter burst times:\n";
-    for(int i=0;i<n;i++){
-        cin>>bt[i];
-        rt[i] = bt[i];
-    }
-
-    qt = 2;
-    int t = 0;
-
-    while(true){
-        bool done = true;
-
-        for(int i=0;i<n;i++){
-            if(rt[i] > 0){
-                done = false;
-
-                if(rt[i] > qt){
-                    t += qt;
-                    rt[i] -= qt;
-                } else {
-                    t += rt[i];
-                    wt[i] = t - bt[i];
-                    rt[i] = 0;
-                }
-            }
-        }
-
-        if(done) break;
-    }
-
-    for(int i=0;i<n;i++)
-        tat[i] = wt[i] + bt[i];
-
-    cout<<"BT  WT  TAT\n";
-    for(int i=0;i<n;i++)
-        cout<<bt[i]<<" "<<wt[i]<<" "<<tat[i]<<endl;
-}
+```
 
 
----
 
 ✅ PROGRAM – 11
 
 Calculate sum of ‘n’ numbers using 2 child processes
 
 
----
+```
 
 PYTHON CODE
 
@@ -402,41 +282,16 @@ else:
         os.wait()
 
 
----
-
-C++ CODE
-
-#include <iostream>
-#include <unistd.h>
-#include <sys/wait.h>
-using namespace std;
-
-int main(){
-    int arr[] = {1,2,3,4,5,6};
-    int pid = fork();
-
-    if(pid == 0){
-        cout<<"Child 1 sum: "<<arr[0]+arr[1]+arr[2]<<endl;
-    } else {
-        int pid2 = fork();
-        if(pid2 == 0){
-            cout<<"Child 2 sum: "<<arr[3]+arr[4]+arr[5]<<endl;
-        } else {
-            wait(NULL);
-            wait(NULL);
-        }
-    }
-}
+```
 
 
----
 
 ✅ PROGRAM – 12
 
 Implement First Fit, Best Fit, Worst Fit Memory Allocation
 
 
----
+```
 
 PYTHON CODE
 
@@ -484,75 +339,9 @@ best_fit()
 worst_fit()
 
 
----
-
-C++ CODE
-
-#include <iostream>
-using namespace std;
-
-int main(){
-    int blocks[] = {100, 500, 200, 300, 600};
-    int process[] = {212, 417, 112, 426};
-
-    int nBlocks = 5, nProcess = 4;
-
-    // First Fit
-    cout<<"\nFIRST FIT\n";
-    int ff[5];
-    for(int i=0;i<nBlocks;i++) ff[i] = blocks[i];
-
-    for(int i=0;i<nProcess;i++){
-        for(int j=0;j<nBlocks;j++){
-            if(ff[j] >= process[i]){
-                cout<<"Process "<<process[i]<<" allocated to block "<<ff[j]<<endl;
-                ff[j] -= process[i];
-                break;
-            }
-        }
-    }
-
-    // Best Fit
-    cout<<"\nBEST FIT\n";
-    int bf[5];
-    for(int i=0;i<nBlocks;i++) bf[i] = blocks[i];
-
-    for(int i=0;i<nProcess;i++){
-        int best=-1;
-        for(int j=0;j<nBlocks;j++){
-            if(bf[j] >= process[i]){
-                if(best==-1 || bf[j] < bf[best])
-                    best = j;
-            }
-        }
-        if(best != -1){
-            cout<<"Process "<<process[i]<<" allocated to block "<<bf[best]<<endl;
-            bf[best] -= process[i];
-        }
-    }
-
-    // Worst Fit
-    cout<<"\nWORST FIT\n";
-    int wf[5];
-    for(int i=0;i<nBlocks;i++) wf[i] = blocks[i];
-
-    for(int i=0;i<nProcess;i++){
-        int worst=-1;
-        for(int j=0;j<nBlocks;j++){
-            if(wf[j] >= process[i]){
-                if(worst==-1 || wf[j] > wf[worst])
-                    worst = j;
-            }
-        }
-        if(worst != -1){
-            cout<<"Process "<<process[i]<<" allocated to block "<<wf[worst]<<endl;
-            wf[worst] -= process[i];
-        }
-    }
-}
-
-
----
-
-
 ```
+
+
+
+
+
