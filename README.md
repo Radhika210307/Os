@@ -341,6 +341,98 @@ worst_fit()
 
 ```
 
+Q3
+PART (i) — Same Program, Same Code
+
+(Parent और Child दोनों बिल्कुल same code execute करते हैं)
+
+✔ C Code (Linux Terminal)
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        printf("Fork failed!\n");
+        return 1;
+    }
+    else if (pid == 0) {
+        printf("Child: Executing SAME code. PID = %d\n", getpid());
+    }
+    else {
+        wait(NULL); // parent waits
+        printf("Parent: Executing SAME code. PID = %d\n", getpid());
+    }
+
+    return 0;
+}
+
+✔ Output
+Child पहले चलेगा → फिर Parent
+
+
+```
+
+✅ PART (ii) — Same Program, Different Code
+
+(Parent & Child एक ही program के अंदर different code blocks चलाते हैं)
+
+✔ C Code
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        printf("Child: I am running DIFFERENT code.\n");
+    }
+    else {
+        wait(NULL);
+        printf("Parent: I am running DIFFERENT code.\n");
+    }
+
+    return 0;
+}
+
+✔ अलग-अलग outputs मिलेंगे।
+
+
+```
+
+✅ PART (iii) — Parent waits until Child finishes
+
+(Child अपना काम पूरा करे → Parent बाद में execute हो)
+
+
+✔ C Code
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        printf("Child: Working...\n");
+        sleep(2);      // child slow task
+        printf("Child: Finished!\n");
+    }
+    else {
+        wait(NULL);    // PARENT WAITS
+        printf("Parent: Child finished, now I am ending.\n");
+    }
+
+    return 0;
+}
+
+```
 
 
 
