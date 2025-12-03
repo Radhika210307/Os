@@ -12,10 +12,7 @@ iii. Protection Management: chmod, chown, chgrp
 
 
 
-3. Write a program (using fork () and/or exec () commands) where parent and child execute:
-i. same program, same code.
-ii. same program, different code.
-iii. before terminating, the parent waits for the child to finish its task.
+
 
 
 
@@ -341,12 +338,14 @@ worst_fit()
 
 ```
 
-Q3
-PART (i) — Same Program, Same Code
-
-(Parent और Child दोनों बिल्कुल same code execute करते हैं)
-
+Q3 3. Write a program (using fork () and/or exec () commands) where parent and child execute:
+i. same program, same code.
+ii. same program, different code.
+iii. before terminating, the parent waits for the child to finish its task.
 ✔ C Code (Linux Terminal)
+
+
+
 ```
 #include <stdio.h>
 #include <unistd.h>
@@ -381,6 +380,10 @@ Child पहले चलेगा → फिर Parent
 (Parent & Child एक ही program के अंदर different code blocks चलाते हैं)
 
 ✔ C Code
+
+
+
+
 ```
 #include <stdio.h>
 #include <unistd.h>
@@ -411,6 +414,9 @@ int main() {
 
 
 ✔ C Code
+
+
+
 ```
 #include <stdio.h>
 #include <unistd.h>
